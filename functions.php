@@ -36,7 +36,9 @@ function setCurl(&$ch, array $header)
 	$b = curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 不检查证书与域名是否匹配（2为检查）
 	$c = curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 以字符串返回结果而非输出
 	$d = curl_setopt($ch, CURLOPT_HTTPHEADER, $header); // 请求头
-	return ($a && $b && $c && $d);
+	$e =curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+    $f =curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1:666");
+	return ($a && $b && $c && $d && $e && $f);
 }
 function post(string $url, $data, array $header)
 { // POST 发送数据
@@ -44,6 +46,8 @@ function post(string $url, $data, array $header)
 	setCurl($ch, $header);
 	curl_setopt($ch, CURLOPT_POST, true); // POST 方法
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // POST 的数据
+	curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+    curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1:666");
 	$result = curl_exec($ch);
 	curl_close($ch);
 	return $result;
@@ -52,6 +56,8 @@ function get(string $url, array $header)
 { // GET 请求数据
 	$ch = curl_init($url);
 	setCurl($ch, $header);
+	curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+    curl_setopt($ch, CURLOPT_PROXY, "127.0.0.1:666");
 	$result = curl_exec($ch);
 	curl_close($ch);
 	return $result;
